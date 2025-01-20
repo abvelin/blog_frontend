@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/form/*": ["./src/components/form/*"],
+      "@/input_field": ["./src/components/ui/input_field"],
+      "@/select_field": ["./src/components/ui/select_field"],
+      "@/select_multi_field": ["./src/components/ui/select_multi_field"],
+      "@/photo_upload": ["./src/components/ui/photo_upload/photo_upload"],
+      "@/tiptap_wysiwyg": ["./src/components/ui/tiptap_wysiwyg/tiptap_wysiwyg"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

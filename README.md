@@ -1,3 +1,7 @@
+@docs.plus/extension-hyperlink @hookform/resolvers @tiptap/extension-link @tiptap/extension-underline @tiptap/pm @tiptap/react @tiptap/starter-kit framer-motion lucide-react react-hook-form react-select sass zod
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
