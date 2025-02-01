@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useForm, Controller, FieldValues } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Image as Image_icon } from "lucide-react";
@@ -13,18 +14,22 @@ import { Photo_upload, accepted_files } from "@/photo_upload";
 import { Tiptap_wysiwyg } from '@/tiptap_wysiwyg';
 import { create, update } from "./server";
 import Image from "next/image";
-import { Select_field } from "@/select_field";
+// import { Select_field } from "@/select_field";
 import useSWR from "swr";
 // import { Category } from "../categories/zod_schema";
 import { find_all } from "../categories/server";
+import { Select_field } from "@/components/ui/select_field";
+// import { Select_field } from "@/components/form/select_field";
 // import dynamic from "next/dynamic";
 
 // const Tiptap_wysiwyg = dynamic(() => import('../../../components/ui/tiptap_wysiwyg/tiptap_wysiwyg'), { ssr: false })
 // const Tiptap_wysiwyg = dynamic(() => import('@/tiptap_wysiwyg'))
 export const Post_form = ({ post }: { post: Post | undefined }) => {
-    let on_submit
 
     const { data } = useSWR('http://localhost:8080/api/categories', async () => await find_all())
+
+
+    if (post) console.log(`post details is here: ${JSON.stringify(post)}`)
 
     const categories = useMemo(() => {
         return data ? data : [];
@@ -35,36 +40,20 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
         const obj = {}
         return { ...obj, value: category.id, label: category.name }
     })
-    // const categories_avalible = categories.map()
 
-    // let prev_categories: any = [];
+    let prev_category: any = {};
     // const selected_categories_ids: any = [];
 
     const [photo_preview, set_photo_preview] = useState<null | string>(null);
 
     const photo: null | string = null;
 
-    // prev_categories = post?.categories?.map((category: any) => {
-    //     selected_categories_ids?.push(category?.id);
+    // post?.category ? prev_category = { value: post.category?.id, label: post.category?.name }: {}
 
-    //     return { value: category?.id, label: category?.name };
-    // });
-
-    // if (post) {
-    //     photo = post.photo;
-
-
-    //     prev_categories = book?.categories.map((category: any) => {
-    //         selected_categories_ids?.push(category?.id);
-
-    //         return { value: category?.id, label: category?.name };
-    //         // return { value: category?.id };
-    //     });
-
-    //     console.dir(prev_categories);
-
-    //     // book.categories = prev_categories; //🚨 for grabbing ids in formData
-    // }
+    if (post) {
+        prev_category = { value: post.category?.id, label: post.category?.name }
+        // book.categories = prev_categories; //🚨 for grabbing ids in formData
+    }
     useEffect(() => {
         set_photo_preview(() => photo);
     }, [photo]);
@@ -80,13 +69,19 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
         resolver: zodResolver(post_schema),
     });
 
-    // eslint-disable-next-line prefer-const
-    on_submit = async (formValues: FieldValues) => {
+
+
+    const on_submit = async (formValues: FieldValues) => {
 
         formValues.category.id = formValues.category.value
-        console.log(`inside the submit function form values: ${JSON.stringify(formValues)}`)
-        console.log(`inside the submit function form values formValues.category_id: ${JSON.stringify(formValues.category)}`)
 
+        // formValues.category_id = formValues.category.id
+        // formValues.category.label = formValues.category.label_id
+        delete formValues?.category?.value;
+        delete formValues?.category?.label;
+
+        console.log(`formValues before we enter in result.succes: ${JSON.stringify(formValues)}`)
+        // return
         // if (typeof accepted_files[0] === "undefined" && !formValues.id) return;
 
         // if (typeof accepted_files[0] === "object") {
@@ -116,8 +111,13 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
 
         if (result.success) {
 
+            console.log(`formValues id : ${JSON.stringify(formValues.id)}`)
+            console.log(`formValues in success: ${JSON.stringify(formValues)}`)
+            console.log(`post_id: ${post?.id}`)
+
             const data = result.data
 
+            console.log(`data: ${JSON.stringify(data)}`)
             let post_id
             if (post?.id) {
                 // data.categories = formValues.categories
@@ -150,6 +150,31 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
                         error={errors?.title?.message}
                     />
 
+                    {/* <div className="">
+
+                        <Controller
+                            name="category"
+                            // defaultValue={prev_categories}
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <Select_field
+                                    label="Categories"
+                                    placeholder="Select your categories"
+                                    defaultValue={post?.category}
+                                    options={categories_available}
+                                    selection_values={value}
+                                    on_change={onChange}
+                                    error={errors?.category?.message} />
+                            )}
+                        />
+                        {errors.category && (
+                            <p className="text-red-500">{`${errors.category?.message}`}</p>
+                        )}
+                        {errors && (
+                            <p className="text-red-500">{`${errors}`}</p>
+                        )}
+                    </div> */}
+
                     <div className="">
                         <Select_field
                             name="category"
@@ -157,7 +182,7 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
                             placeholder="Select your category"
                             control={control}
                             options={categories_available}
-                            // defaultValue={post?.category}
+                            defaultValue={post?.category}
                             isMulti={false}
                         />
                     </div>
@@ -187,6 +212,15 @@ export const Post_form = ({ post }: { post: Post | undefined }) => {
                         >
                             Submit
                         </button>
+                        {errors.category && (
+                            <p className="text-red-500">{`${errors.category?.message}`}</p>
+                        )}
+                        {errors && (
+                            <div>
+                                <p className="text-red-500">{`${JSON.stringify(errors)}`}</p>
+                                {/* <p>{post?.createdAt}</p> */}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col w-4/12 gap-4">

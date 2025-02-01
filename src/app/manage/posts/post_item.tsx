@@ -12,19 +12,27 @@ export const Post_item = ({ post }: { post: Post }) => {
 
 
     return (
-        <div className="w-1/4 p-4 my-4 text-gray-600">
-            <div className="bg-gray-200">
+        <div className="flex flex-col flex-1  my-4 text-gray-600">
+            <div className="bg-gray-200 flex flex-col">
                 <div className="relative bg-red-900 pb-1/1">
                     {/* <Image src={book.photo} width={500} /> */}
                     {/* {/* <img src={book.photo} className="absolute object-contain w-full h-full bg-red-500" /> */}
 
                 </div>
-                <Link
-                    href={`/manage/books/${post?.id}`}
-                    className="text-2xl text-blue-500"
-                >
-                    {post?.title}
-                </Link>
+                <div>
+                    <Link
+                        href={`/manage/posts/${post?.id}`}
+                        className="text-2xl text-blue-500"
+                    >
+                        {post?.title}
+                    </Link>
+
+                    <span className="ml-6 bg-blue-300 text-blue-500 px-2 py-1">{post.category.name}</span>
+                </div>
+                <div className="py-4" />
+
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+
                 {/* <div>{post.content}</div> */}
                 {/* <div dangerouslySetInnerHTML={{ __html: post.description }} className="text-red-500"></div> */}
                 {/* {post.categories && (

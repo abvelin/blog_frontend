@@ -25,7 +25,7 @@ import { z } from 'zod'
 // export type Tag = z.infer<typeof tag_schema>; // number
 
 export const post_schema = z.object({
-    id: z.string().uuid().optional(),
+    id: z.number().optional(),
     title: z.string().trim().min(3, { message: "title min character is 3yr" }),
     content: z.string().trim().min(9, { message: "the content must be at least 9 characters" }),
 
@@ -50,8 +50,16 @@ export const post_schema = z.object({
     // category_id: z.any(),
     // tags: z.any(),
 
-    created_at: z.date().optional(),
-    updated_at: z.date().optional(),
+    // createdAt: z.date().optional(),
+    createdAt: z.string().refine((value) => !isNaN(Date.parse(value)), {
+        message: "Expected date, received string",
+    }),  // Validate string as a valid date
+    time_ago_for_created_at: z.string().optional(),
+    time_ago_for_updated_at: z.string().optional(),
+    // updatedAt: z.date().optional(),
+    updatedAt: z.string().refine((value) => !isNaN(Date.parse(value)), {
+        message: "Expected date, received string",
+    }),
 });
 
 export type Post = z.infer<typeof post_schema>;

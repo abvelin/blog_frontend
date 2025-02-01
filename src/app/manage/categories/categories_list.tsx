@@ -93,7 +93,7 @@ export const Categories_list = ({ categories, mutate }: { categories: Category[]
                                                     </Link>
                                                 </td>
                                                 <td className='flex'>
-                                                    <button
+                                                    {/* <button
                                                         onClick={
                                                             async () => {
                                                                 if (category.id) await remove(category.id, categories_order)
@@ -102,7 +102,7 @@ export const Categories_list = ({ categories, mutate }: { categories: Category[]
                                                         }
                                                         className=''>
                                                         <X className='m-2 text-red-600' />
-                                                    </button>
+                                                    </button> */}
 
                                                     <Link href={`categories/${category.id}/edit`}
                                                         className="">

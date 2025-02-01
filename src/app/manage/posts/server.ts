@@ -27,11 +27,22 @@ export const find_all = async () => {
     return posts
 }
 
+export const find = async (id: number) => {
+    const post = await axios
+        .get(`http://localhost:8080/api/posts/${id}`)
+        .then((res: { data: Post }) => res.data)
+        .catch((error: unknown) => console.log(`error ${error}`))
+    return post
+}
+
 export const update = async (id: unknown, data: Post) => {
     await axios
-        .put(`/api/posts/${id}`, data)
+        .put(`http://localhost:8080/api/posts/${id}`, data)
         .then((res: { data: Post }) => JSON.stringify(res.data))
         .catch((error: unknown) => console.log(`error ${error}`))
+
+    revalidatePath("/manage/posts")
+    redirect('/manage/posts')
 }
 
 export const deletee = async (id: unknown) => {

@@ -14,6 +14,7 @@ const Select_field = ({ name, control, options, placeholder, isMulti = false, la
         defaultValue,
     });
 
+    const normalized_value = value ?? (isMulti ? [] : "");
     return (
 
         <div className="mb-2">
@@ -23,7 +24,8 @@ const Select_field = ({ name, control, options, placeholder, isMulti = false, la
             <div className="mt-1 flex flex-col">
                 <Select
                     name={name}
-                    value={value}
+                    value={normalized_value}
+                    // defaultValue={defaultValue}
                     onChange={onChange}
                     onBlur={onBlur}
                     options={options}
